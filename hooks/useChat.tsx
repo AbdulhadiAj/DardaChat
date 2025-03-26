@@ -4,15 +4,15 @@ import { useMemo } from "react";
 export const useChat = () => {
   const params = useParams();
 
-  const conversationId = useMemo(
+  const chatId = useMemo(
     () => params?.chatId || ("" as string),
     [params?.chatId]
   );
 
-  const isActive = useMemo(() => !!conversationId, [conversationId]);
+  const isActive = useMemo(() => !!chatId, [chatId]);
 
   return {
     isActive,
-    conversationId,
+    chatId,
   };
 };
