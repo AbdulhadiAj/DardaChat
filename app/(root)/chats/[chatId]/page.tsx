@@ -19,7 +19,6 @@ type Props = {
 
 const ChatPage = ({ params: { chatId } }: Props) => {
   const chat = useQuery(api.chat.get, { id: chatId });
-  console.log(chat);
 
   const [removeFriendDialogOpen, setRemoveFriendDialogOpen] = useState(false);
   const [callType, setCallType] = useState<"audio" | "video" | null>(null);

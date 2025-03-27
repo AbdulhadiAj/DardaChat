@@ -18,7 +18,6 @@ type Props = {
 
 const ChatPage = ({ params: { groupId } }: Props) => {
   const chat = useQuery(api.chat.get, { id: groupId });
-  console.log(groupId);
 
   const [deleteGroupDialogOpen, setDeleteGroupDialogOpen] = useState(false);
   const [leaveGroupDialogOpen, setLeaveGroupDialogOpen] = useState(false);
