@@ -71,6 +71,7 @@ export const get = query({
             }
 
             return {
+              _id: member._id,
               username: member.username,
             };
           })
@@ -216,5 +217,45 @@ export const leaveGroup = mutation({
     }
 
     await ctx.db.delete(membership._id);
+  },
+});
+
+export const markRead = mutation({
+  args: {
+    chatId: v.id("chats"),
+    messageId: v.id("messages"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Unauthorized");
+    }
+
+    const currentUser = await getUserByClerkId({
+      ctx,
+      clerkId: identity.subject,
+    });
+
+    if (!currentUser) {
+      throw new ConvexError("User not found");
+    }
+
+    const membership = await ctx.db
+      .query("chatMembers")
+      .withIndex("by_memberId_chatId", (q) =>
+        q.eq("memberId", currentUser._id).eq("chatId", args.chatId)
+      )
+      .unique();
+
+    if (!membership) {
+      throw new ConvexError("You are not a memeber of this group");
+    }
+
+    const lastMessage = await ctx.db.get(args.messageId);
+
+    await ctx.db.patch(membership._id, {
+      lastSeenMessage: lastMessage ? lastMessage._id : undefined,
+    });
   },
 });

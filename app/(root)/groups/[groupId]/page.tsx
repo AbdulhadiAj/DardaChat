@@ -60,7 +60,7 @@ const ChatPage = ({ params: { groupId } }: Props) => {
           },
         ]}
       />
-      <Body />
+      <Body members={chat.otherMembers ? chat.otherMembers : []} />
       <ChatInput />
     </ChatContainer>
   );

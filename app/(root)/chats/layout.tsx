@@ -32,6 +32,7 @@ const ChatsLayout = ({ children }: Props) => {
                   imageUrl={chat.otherMember?.imageUrl || ""}
                   lastMessageContent={chat.lastMessage?.content}
                   lastMessageSender={chat.lastMessage?.sender}
+                  unseenCount={chat.unseenChatCount}
                 />
               ) : null;
             })

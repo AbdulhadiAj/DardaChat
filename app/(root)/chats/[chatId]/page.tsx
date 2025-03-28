@@ -49,7 +49,7 @@ const ChatPage = ({ params: { chatId } }: Props) => {
           },
         ]}
       />
-      <Body />
+      <Body members={chat.otherMember ? [chat.otherMember] : []} />
       <ChatInput />
     </ChatContainer>
   );

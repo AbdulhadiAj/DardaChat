@@ -9,6 +9,20 @@ export const useNavigation = () => {
 
   const requestsCount = useQuery(api.requests.count);
 
+  const chats = useQuery(api.chats.get);
+
+  const unseenChatMessagesCount = useMemo(() => {
+    return chats?.reduce((acc, curr) => {
+      return curr.unseenChatCount ? acc + curr.unseenChatCount : acc + 0;
+    }, 0);
+  }, [chats]);
+
+  const unseenGroupMessagesCount = useMemo(() => {
+    return chats?.reduce((acc, curr) => {
+      return curr.unseenGroupCount ? acc + curr.unseenGroupCount : acc + 0;
+    }, 0);
+  }, [chats]);
+
   const paths = useMemo(
     () => [
       {
@@ -22,12 +36,14 @@ export const useNavigation = () => {
         href: "/chats",
         icon: <MessageSquare />,
         active: pathname.startsWith("/chats"),
+        count: unseenChatMessagesCount,
       },
       {
         name: "Groups",
         href: "/groups",
         icon: <Users />,
         active: pathname.startsWith("/groups"),
+        count: unseenGroupMessagesCount,
       },
       {
         name: "Contacts",
@@ -43,7 +59,7 @@ export const useNavigation = () => {
         active: pathname === "/settings",
       },
     ],
-    [pathname, requestsCount]
+    [pathname, requestsCount, unseenChatMessagesCount, unseenGroupMessagesCount]
   );
 
   return paths;

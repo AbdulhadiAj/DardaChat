@@ -32,6 +32,7 @@ const GroupsLayout = ({ children }: Props) => {
                   name={chat.chat.name || ""}
                   lastMessageContent={chat.lastMessage?.content}
                   lastMessageSender={chat.lastMessage?.sender}
+                  unseenCount={chat.unseenGroupCount}
                 />
               ) : null;
             })

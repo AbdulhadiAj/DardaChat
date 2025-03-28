@@ -51,9 +51,35 @@ export const get = query({
           id: chat.lastMessageId,
         });
 
+        const lastSeenMessage = chatMemberships[index].lastSeenMessage
+          ? await ctx.db.get(chatMemberships[index].lastSeenMessage)
+          : null;
+
+        const lastSeenMessageTime = lastSeenMessage
+          ? lastSeenMessage._creationTime
+          : -1;
+
         if (chat.isGroup) {
-          return { chat, lastMessage };
+          const unseenGroupMessages = await ctx.db
+            .query("messages")
+            .withIndex("by_chatId", (q) => q.eq("chatId", chat._id))
+            .filter((q) => q.gt(q.field("_creationTime"), lastSeenMessageTime))
+            .filter((q) => q.neq(q.field("senderId"), currentUser._id))
+            .collect();
+
+          return {
+            chat,
+            lastMessage,
+            unseenGroupCount: unseenGroupMessages.length,
+          };
         } else {
+          const unseenChatMessages = await ctx.db
+            .query("messages")
+            .withIndex("by_chatId", (q) => q.eq("chatId", chat._id))
+            .filter((q) => q.gt(q.field("_creationTime"), lastSeenMessageTime))
+            .filter((q) => q.neq(q.field("senderId"), currentUser._id))
+            .collect();
+
           const otherMembership = allChatMemberships.filter(
             (membership) => membership.memberId !== currentUser._id
           )[0];
@@ -64,6 +90,7 @@ export const get = query({
             chat,
             otherMember,
             lastMessage,
+            unseenChatCount: unseenChatMessages.length,
           };
         }
       })
