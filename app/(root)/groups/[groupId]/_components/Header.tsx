@@ -25,7 +25,7 @@ const Header = ({ name, options }: Props) => {
   return (
     <Card className="w-full flex flex-row rounded-lg items-center p-2 justify-between">
       <div className="flex items-center gap-2">
-        <Link href="/chats" className="block lg:hidden">
+        <Link href="/groups" className="block lg:hidden">
           <CircleArrowLeft />
         </Link>
         <Avatar className="h-8 w-8">

@@ -9,6 +9,8 @@ import React, { useState } from "react";
 import Header from "./_components/Header";
 import Body from "@/components/shared/chat/chat-page-components/body/Body";
 import ChatInput from "@/components/shared/chat/chat-page-components/input/ChatInput";
+import DeleteGroupDialog from "./_components/dialogs/DeleteGroupDialog";
+import LeaveGroupDialog from "./_components/dialogs/LeaveGroupDialog";
 
 type Props = {
   params: {
@@ -33,6 +35,16 @@ const ChatPage = ({ params: { groupId } }: Props) => {
     </p>
   ) : (
     <ChatContainer>
+      <DeleteGroupDialog
+        chatId={groupId}
+        open={deleteGroupDialogOpen}
+        setOpen={setDeleteGroupDialogOpen}
+      />
+      <LeaveGroupDialog
+        chatId={groupId}
+        open={leaveGroupDialogOpen}
+        setOpen={setLeaveGroupDialogOpen}
+      />
       <Header
         name={chat.name || ""}
         options={[
