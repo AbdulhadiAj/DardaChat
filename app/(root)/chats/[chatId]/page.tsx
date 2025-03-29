@@ -5,19 +5,18 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { Loader2 } from "lucide-react";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import Header from "./_components/Header";
 import Body from "@/components/shared/chat/chat-page-components/body/Body";
 import ChatInput from "@/components/shared/chat/chat-page-components/input/ChatInput";
 import RemoveFriendDialog from "./_components/dialogs/RemoveFriendDialog";
 
-type Props = {
-  params: {
-    chatId: Id<"chats">;
-  };
-};
+type Params = Promise<{ chatId: Id<"chats"> }>;
 
-const ChatPage = ({ params: { chatId } }: Props) => {
+const ChatPage = (props: { params: Params }) => {
+  const params = use(props.params);
+  const chatId = params.chatId;
+
   const chat = useQuery(api.chat.get, { id: chatId });
 
   const [removeFriendDialogOpen, setRemoveFriendDialogOpen] = useState(false);
