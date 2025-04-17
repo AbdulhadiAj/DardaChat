@@ -41,19 +41,59 @@ const handleClerkWebhook = httpAction(async (ctx, req) => {
       const user = await ctx.runQuery(internal.user.get, {
         clerkId: event.data.id,
       });
-      if (user) {
-        console.log(`Updating user ${event.data.id} with ${event.data}`);
+
+      if (!user) {
+        console.log(`Creating user ${event.data.id}`);
+        await ctx.runMutation(internal.user.create, {
+          username: `${event.data.username}`,
+          imageUrl: event.data.image_url,
+          clerkId: event.data.id,
+          email: event.data.email_addresses[0].email_address,
+        });
+      } else {
+        console.log(`User already exists with clerkId ${event.data.id}`);
       }
+
+      break;
     }
 
     case "user.updated": {
-      console.log("Creating/Updating User:", event.data.id);
+      console.log("Updating User:", event.data.id);
 
-      await ctx.runMutation(internal.user.create, {
-        username: `${event.data.username}`,
-        imageUrl: event.data.image_url,
+      const user = await ctx.runQuery(internal.user.get, {
         clerkId: event.data.id,
-        email: event.data.email_addresses[0].email_address,
+      });
+
+      if (user) {
+        await ctx.runMutation(internal.user.update, {
+          id: user._id,
+          username: `${event.data.username}`,
+          imageUrl: event.data.image_url,
+          email: event.data.email_addresses[0].email_address,
+        });
+      } else {
+        await ctx.runMutation(internal.user.create, {
+          username: `${event.data.username}`,
+          imageUrl: event.data.image_url,
+          clerkId: event.data.id,
+          email: event.data.email_addresses[0].email_address,
+        });
+      }
+
+      break;
+    }
+
+    case "user.deleted": {
+      const clerkId = event.data?.id;
+
+      if (!clerkId) {
+        console.error("Missing Clerk ID in user.deleted event");
+        break;
+      }
+      console.log("Deleting User:", clerkId);
+
+      await ctx.runMutation(internal.user.deleteUser, {
+        clerkId,
       });
 
       break;

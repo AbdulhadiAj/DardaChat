@@ -22,3 +22,35 @@ export const get = internalQuery({
       .unique();
   },
 });
+
+export const update = internalMutation({
+  args: {
+    id: v.id("users"),
+    username: v.string(),
+    imageUrl: v.string(),
+    email: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, {
+      username: args.username,
+      imageUrl: args.imageUrl,
+      email: args.email,
+    });
+  },
+});
+
+export const deleteUser = internalMutation({
+  args: {
+    clerkId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
+      .first();
+
+    if (user) {
+      await ctx.db.delete(user._id);
+    }
+  },
+});
