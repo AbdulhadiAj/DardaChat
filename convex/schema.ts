@@ -27,6 +27,7 @@ export default defineSchema({
   chats: defineTable({
     name: v.optional(v.string()),
     isGroup: v.boolean(),
+    groupAdminId: v.optional(v.id("users")),
     lastMessageId: v.optional(v.id("messages")),
   }),
   chatMembers: defineTable({
@@ -43,4 +44,19 @@ export default defineSchema({
     type: v.string(),
     content: v.array(v.string()),
   }).index("by_chatId", ["chatId"]),
+  blockedContacts: defineTable({
+    blockedContactId: v.id("users"),
+    blockerContactId: v.id("users"),
+  }),
+  settings: defineTable({
+    profilePhoto: v.boolean(),
+    readReceipts: v.boolean(),
+    userId: v.id("users"),
+  }),
+  files: defineTable({
+    name: v.string(),
+    size: v.int64(),
+    extension: v.string(),
+    messageId: v.id("messages"),
+  }),
 });
