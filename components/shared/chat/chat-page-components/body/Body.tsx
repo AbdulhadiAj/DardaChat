@@ -38,7 +38,7 @@ const Body = ({ members }: Props) => {
         messageId: messages[0].message._id,
       });
     }
-  }, [messages?.length, chatId, markRead]);
+  }, [messages?.length, chatId]);
 
   const formatSeenBy = (names: string[]) => {
     switch (names.length) {
