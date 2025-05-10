@@ -28,7 +28,7 @@ const UnblockFriendDialog = ({ chatId, open, setOpen }: Props) => {
     api.friend.unblock
   );
 
-  const handleBlockFriend = async () => {
+  const handleUnblockFriend = async () => {
     unblockFriend({ chatId })
       .then(() => {
         toast.success("Unblocked friend");
@@ -55,7 +55,7 @@ const UnblockFriendDialog = ({ chatId, open, setOpen }: Props) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
-          <AlertDialogAction disabled={pending} onClick={handleBlockFriend}>
+          <AlertDialogAction disabled={pending} onClick={handleUnblockFriend}>
             Unblock
           </AlertDialogAction>
         </AlertDialogFooter>

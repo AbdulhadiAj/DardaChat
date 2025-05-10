@@ -179,7 +179,16 @@ export const unblock = mutation({
       throw new ConvexError("Block not found");
     }
 
-    await ctx.db.delete(existingBlock._id);
+    if (block1 && block2) {
+      const isUser1 = currentUser._id === friendship.user1;
+      if (isUser1) {
+        await ctx.db.delete(block1._id);
+      } else {
+        await ctx.db.delete(block2._id);
+      }
+    } else {
+      await ctx.db.delete(existingBlock._id);
+    }
   },
 });
 
