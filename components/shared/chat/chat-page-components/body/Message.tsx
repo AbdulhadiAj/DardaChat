@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { format } from "date-fns";
 import React from "react";
+import ImagePreview from "./ImagePreview";
 
 type Props = {
   fromCurrentUser: boolean;
@@ -53,6 +54,7 @@ const Message = ({
               {content}
             </p>
           ) : null}
+          {type === "image" ? <ImagePreview urls={content} /> : null}
           <p
             className={cn("text-[10px] flex w-full my-1", {
               "text-primary-foreground justify-end": fromCurrentUser,

@@ -55,8 +55,6 @@ export default defineSchema({
   }),
   files: defineTable({
     name: v.string(),
-    size: v.int64(),
-    extension: v.string(),
     messageId: v.id("messages"),
   }),
 });
