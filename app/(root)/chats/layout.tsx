@@ -24,7 +24,7 @@ const ChatsLayout = ({ children }: Props) => {
   return (
     <>
       <ItemList title="Chats">
-        <div className="w-full sticky top-0 bg-white z-10">
+        <div className="w-full sticky top-0 bg-secondary z-10 rounded-xl">
           <input
             type="text"
             placeholder="Search chats..."
@@ -50,6 +50,11 @@ const ChatsLayout = ({ children }: Props) => {
                   lastMessageContent={chat.lastMessage?.content}
                   lastMessageSender={chat.lastMessage?.sender}
                   unseenCount={chat.unseenChatCount!}
+                  lastMessageTime={
+                    chat.lastMessage?.lastMessageTime
+                      ? new Date(chat.lastMessage.lastMessageTime)
+                      : undefined
+                  }
                 />
               ) : null
             )
