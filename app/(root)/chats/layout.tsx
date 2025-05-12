@@ -13,7 +13,13 @@ const ChatsLayout = ({ children }: Props) => {
   const chats = useQuery(api.chats.get);
   const [search, setSearch] = useState("");
 
-  const friendChats = chats?.filter((chat) => !chat.chat.isGroup);
+  const friendChats = chats
+    ?.filter((chat) => !chat.chat.isGroup)
+    .sort((a, b) => {
+      const aTime = a.lastMessage?.lastMessageTime ?? 0;
+      const bTime = b.lastMessage?.lastMessageTime ?? 0;
+      return bTime - aTime; // Descending order: newest first
+    });
 
   const filteredChats = friendChats?.filter((chat) =>
     chat.otherMember?.username

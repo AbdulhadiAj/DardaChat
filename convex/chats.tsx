@@ -125,7 +125,7 @@ const getLastMessageDetails = async ({
   return {
     content,
     sender: sender.username,
-    lastMessageTime: sender._creationTime,
+    lastMessageTime: message._creationTime,
   };
 };
 
