@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Id } from "@/convex/_generated/dataModel";
 import Link from "next/link";
 import React from "react";
+import { format, isToday, isYesterday } from "date-fns";
 
 type Props = {
   id: Id<"chats">;
@@ -11,6 +12,7 @@ type Props = {
   lastMessageSender?: string;
   lastMessageContent?: string;
   unseenCount: number;
+  lastMessageTime?: Date;
 };
 
 const GroupChatItem = ({
@@ -19,36 +21,47 @@ const GroupChatItem = ({
   lastMessageSender,
   lastMessageContent,
   unseenCount,
+  lastMessageTime,
 }: Props) => {
+  const formattedTime =
+    lastMessageTime &&
+    (isToday(lastMessageTime)
+      ? format(lastMessageTime, "p")
+      : isYesterday(lastMessageTime)
+        ? "Yesterday"
+        : format(lastMessageTime, "MMM d"));
+
   return (
     <Link href={`/groups/${id}`} className="w-full">
       <Card className="p-2 flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center gap-4 truncate">
+        <div className="flex flex-row items-center w-full">
           <Avatar>
             <AvatarFallback>
               {name.charAt(0).toLocaleUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="flex flex-col truncate">
-            <h4 className="truncate">{name}</h4>
-            {lastMessageSender && lastMessageContent ? (
-              <span className="text-sm text-muted-foreground flex truncate overflow-ellipsis">
-                <p className="font-semibold">
-                  {lastMessageSender}
-                  {":"}&nbsp;
-                </p>
-                <p className="truncate overflow-ellipsis">
-                  {lastMessageContent}
-                </p>
-              </span>
-            ) : (
-              <p className="text-sm text-muted-foreground truncate">
-                Start the chat!
-              </p>
-            )}
+          <div className="flex flex-col w-full flex-1 px-3">
+            <div className="flex justify-between items-center w-full">
+              <h4 className="truncate">{name}</h4>
+              {lastMessageTime && (
+                <span className="text-xs font-semibold text-muted-foreground ml-2 whitespace-nowrap">
+                  {formattedTime}
+                </span>
+              )}
+            </div>
+            <div className="text-sm text-muted-foreground truncate">
+              {lastMessageSender && lastMessageContent ? (
+                <>
+                  <span className="font-semibold">{lastMessageSender}: </span>
+                  <span>{lastMessageContent}</span>
+                </>
+              ) : (
+                "Start the chat!"
+              )}
+            </div>
           </div>
+          {unseenCount ? <Badge>{unseenCount}</Badge> : null}
         </div>
-        {unseenCount ? <Badge>{unseenCount}</Badge> : null}
       </Card>
     </Link>
   );
