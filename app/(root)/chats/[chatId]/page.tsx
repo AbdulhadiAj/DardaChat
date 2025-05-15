@@ -74,8 +74,13 @@ const ChatPage = (props: { params: Params }) => {
             onClick: () => setRemoveFriendDialogOpen(true),
           },
         ]}
+        setCallType={setCallType}
       />
-      <Body members={chat.otherMember ? [chat.otherMember] : []} />
+      <Body
+        members={chat.otherMember ? [chat.otherMember] : []}
+        callType={callType}
+        setCallType={setCallType}
+      />
       {isBlocked?.existingBlock && isBlocked?.isBlocker ? (
         <p className="flex items-center justify-center text-red-500">
           You blocked this contact

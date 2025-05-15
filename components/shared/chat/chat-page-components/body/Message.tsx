@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import React from "react";
 import ImagePreview from "./ImagePreview";
 import FilePreview from "./FilePreview";
+import { Badge } from "@/components/ui/badge";
 
 type Props = {
   fromCurrentUser: boolean;
@@ -57,6 +58,9 @@ const Message = ({
           ) : null}
           {type === "image" ? <ImagePreview urls={content} /> : null}
           {type === "file" ? <FilePreview url={content[0]} /> : null}
+          {type === "call" ? (
+            <Badge variant="secondary">Video/Audio Call</Badge>
+          ) : null}
           <p
             className={cn("text-[10px] flex w-full my-1", {
               "text-primary-foreground justify-end": fromCurrentUser,
