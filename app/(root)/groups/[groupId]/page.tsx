@@ -69,8 +69,16 @@ const ChatPage = (props: { params: Params }) => {
         open={leaveGroupDialogOpen}
         setOpen={setLeaveGroupDialogOpen}
       />
-      <Header name={chat.name || ""} options={options} />
-      <Body members={chat.otherMembers ? chat.otherMembers : []} />
+      <Header
+        name={chat.name || ""}
+        options={options}
+        setCallType={setCallType}
+      />
+      <Body
+        members={chat.otherMembers ? chat.otherMembers : []}
+        callType={callType}
+        setCallType={setCallType}
+      />
       <ChatInput />
     </ChatContainer>
   );
