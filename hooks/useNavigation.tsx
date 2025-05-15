@@ -1,6 +1,12 @@
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
-import { Contact, MessageSquare, Settings, User, Users } from "lucide-react";
+import {
+  MessageSquare,
+  NotebookTabs,
+  Settings,
+  User,
+  Users,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
@@ -48,7 +54,7 @@ export const useNavigation = () => {
       {
         name: "Contacts",
         href: "/contacts",
-        icon: <Contact />,
+        icon: <NotebookTabs />,
         active: pathname === "/contacts",
         count: requestsCount,
       },

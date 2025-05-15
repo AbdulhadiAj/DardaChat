@@ -7,10 +7,16 @@ import React from "react";
 
 type Props = React.PropsWithChildren<{
   title: string;
-  action?: React.ReactNode;
+  action1?: React.ReactNode;
+  action2?: React.ReactNode;
 }>;
 
-const ItemList = ({ children, title, action: Action }: Props) => {
+const ItemList = ({
+  children,
+  title,
+  action1: Action1,
+  action2: Action2,
+}: Props) => {
   const { isActive } = useChat();
   return (
     <Card
@@ -21,7 +27,10 @@ const ItemList = ({ children, title, action: Action }: Props) => {
     >
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-        {Action ? Action : null}
+        <div className="flex items-center justify-between">
+          <div>{Action1 ? Action1 : null}</div>
+          {Action2 ? <div className="ml-4">{Action2}</div> : null}
+        </div>
       </div>
       <div className="w-full h-full flex flex-col items-center justify-start gap-2">
         {children}

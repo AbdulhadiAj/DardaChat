@@ -53,8 +53,4 @@ export default defineSchema({
     readReceipts: v.boolean(),
     userId: v.id("users"),
   }),
-  files: defineTable({
-    name: v.string(),
-    messageId: v.id("messages"),
-  }),
 });

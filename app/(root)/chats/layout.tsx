@@ -18,7 +18,7 @@ const ChatsLayout = ({ children }: Props) => {
     .sort((a, b) => {
       const aTime = a.lastMessage?.lastMessageTime ?? 0;
       const bTime = b.lastMessage?.lastMessageTime ?? 0;
-      return bTime - aTime; // Descending order: newest first
+      return bTime - aTime;
     });
 
   const filteredChats = friendChats?.filter((chat) =>

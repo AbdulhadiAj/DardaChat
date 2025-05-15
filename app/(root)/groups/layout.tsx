@@ -28,7 +28,7 @@ const GroupsLayout = ({ children }: Props) => {
 
   return (
     <>
-      <ItemList title="Groups" action={<CreateGroupDialog />}>
+      <ItemList title="Groups" action1={<CreateGroupDialog />}>
         <div className="w-full sticky top-0 bg-secondary z-10 rounded-xl">
           <input
             type="text"
