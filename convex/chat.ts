@@ -58,6 +58,7 @@ export const get = query({
           lastSeenMessageId: otherMembership.lastSeenMessage,
         },
         otherMembers: null,
+        isAdmin: false,
       };
     } else {
       const otherMembers = await Promise.all(
@@ -81,6 +82,7 @@ export const get = query({
         ...chat,
         otherMembers,
         otherMember: null,
+        isAdmin: currentUser._id === chat.groupAdminId,
       };
     }
   },
@@ -109,6 +111,7 @@ export const createGroup = mutation({
 
     const chatId = await ctx.db.insert("chats", {
       isGroup: true,
+      groupAdminId: currentUser._id,
       name: args.name,
     });
 

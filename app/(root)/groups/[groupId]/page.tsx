@@ -24,15 +24,40 @@ const ChatPage = (props: { params: Params }) => {
   const [leaveGroupDialogOpen, setLeaveGroupDialogOpen] = useState(false);
   const [callType, setCallType] = useState<"audio" | "video" | null>(null);
 
-  return chat === undefined ? (
-    <div className="w-full h-full flex items-center justify-center">
-      <Loader2 className="h-8 w-8" />
-    </div>
-  ) : chat === null ? (
-    <p className="w-full h-full flex items-center justify-center">
-      Group not found
-    </p>
-  ) : (
+  if (chat === undefined) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Loader2 className="h-8 w-8" />
+      </div>
+    );
+  }
+
+  if (chat === null) {
+    return (
+      <p className="w-full h-full flex items-center justify-center">
+        Group not found
+      </p>
+    );
+  }
+
+  // Build options based on admin status
+  const options = chat.isAdmin
+    ? [
+        {
+          label: "Delete group",
+          destructive: true,
+          onClick: () => setDeleteGroupDialogOpen(true),
+        },
+      ]
+    : [
+        {
+          label: "Leave group",
+          destructive: false,
+          onClick: () => setLeaveGroupDialogOpen(true),
+        },
+      ];
+
+  return (
     <ChatContainer>
       <DeleteGroupDialog
         chatId={groupId}
@@ -44,21 +69,7 @@ const ChatPage = (props: { params: Params }) => {
         open={leaveGroupDialogOpen}
         setOpen={setLeaveGroupDialogOpen}
       />
-      <Header
-        name={chat.name || ""}
-        options={[
-          {
-            label: "Leave group",
-            destructive: false,
-            onClick: () => setLeaveGroupDialogOpen(true),
-          },
-          {
-            label: "Delete group",
-            destructive: true,
-            onClick: () => setDeleteGroupDialogOpen(true),
-          },
-        ]}
-      />
+      <Header name={chat.name || ""} options={options} />
       <Body members={chat.otherMembers ? chat.otherMembers : []} />
       <ChatInput />
     </ChatContainer>
