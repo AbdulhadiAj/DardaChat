@@ -59,3 +59,31 @@ export const get = query({
     return messagesWithUsers;
   },
 });
+
+export const getSentFiles = query({
+  args: {},
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Unauthorized");
+    }
+
+    const currentUser = await getUserByClerkId({
+      ctx,
+      clerkId: identity.subject,
+    });
+
+    if (!currentUser) {
+      throw new ConvexError("User not found");
+    }
+
+    const fileMessages = await ctx.db
+      .query("messages")
+      .withIndex("by_senderId", (q) => q.eq("senderId", currentUser._id))
+      .filter((q) => q.eq(q.field("type"), "file"))
+      .collect();
+
+    return fileMessages;
+  },
+});

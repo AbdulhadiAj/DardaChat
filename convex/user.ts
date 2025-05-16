@@ -1,5 +1,6 @@
-import { internalMutation, internalQuery } from "./_generated/server";
-import { v } from "convex/values";
+import { internalMutation, internalQuery, query } from "./_generated/server";
+import { ConvexError, v } from "convex/values";
+import { getUserByClerkId } from "./_utils";
 
 export const create = internalMutation({
   args: {
@@ -91,5 +92,30 @@ export const deleteUser = internalMutation({
     );
 
     await ctx.db.delete(user._id);
+  },
+});
+
+export const getProfile = query({
+  args: {},
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new ConvexError("Unauthorized");
+    }
+
+    const currentUser = await getUserByClerkId({
+      ctx,
+      clerkId: identity.subject,
+    });
+
+    if (!currentUser) {
+      throw new ConvexError("User not found");
+    }
+
+    return ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", currentUser.email))
+      .unique();
   },
 });

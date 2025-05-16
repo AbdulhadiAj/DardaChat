@@ -43,7 +43,9 @@ export default defineSchema({
     chatId: v.id("chats"),
     type: v.string(),
     content: v.array(v.string()),
-  }).index("by_chatId", ["chatId"]),
+  })
+    .index("by_chatId", ["chatId"])
+    .index("by_senderId", ["senderId"]),
   blockedContacts: defineTable({
     blockedContactId: v.id("users"),
     blockerContactId: v.id("users"),
