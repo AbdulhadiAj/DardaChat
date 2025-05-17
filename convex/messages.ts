@@ -47,11 +47,17 @@ export const get = query({
           throw new ConvexError("Could not find sender of message");
         }
 
+        const settings = await ctx.db
+          .query("settings")
+          .withIndex("by_userId", (q) => q.eq("userId", messageSender._id))
+          .first();
+
         return {
           message,
           senderImage: messageSender.imageUrl,
           senderName: messageSender.username,
           isCurrentUser: messageSender._id === currentUser._id,
+          settings,
         };
       })
     );

@@ -47,7 +47,7 @@ const ProfilePage = (props: Props) => {
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="about">
                 <AccordionTrigger>About</AccordionTrigger>
-                <AccordionContent className="text-sm space-y-2">
+                <AccordionContent className="text-sm space-y-4">
                   <div>
                     <span className="text-muted-foreground">Name</span>
                     <br />
@@ -74,7 +74,7 @@ const ProfilePage = (props: Props) => {
                 <AccordionTrigger>Attached Files</AccordionTrigger>
                 <AccordionContent>
                   {attachedFiles && attachedFiles.length > 0 ? (
-                    <ul className="space-y-2">
+                    <ul className="space-y-4">
                       {attachedFiles.flatMap((file) =>
                         file.content.map((fileString, index) => {
                           const [url, name] = fileString.split("#");

@@ -1,4 +1,9 @@
-import { internalMutation, internalQuery, query } from "./_generated/server";
+import {
+  internalMutation,
+  internalQuery,
+  mutation,
+  query,
+} from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 import { getUserByClerkId } from "./_utils";
 
@@ -11,6 +16,21 @@ export const create = internalMutation({
   },
   handler: async (ctx, args) => {
     await ctx.db.insert("users", args);
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q) => q.eq("email", args.email))
+      .unique();
+
+    if (!user) {
+      throw new ConvexError("User not found");
+    }
+
+    await ctx.db.insert("settings", {
+      profilePhoto: false,
+      readReceipts: false,
+      userId: user._id,
+    });
   },
 });
 
@@ -113,9 +133,43 @@ export const getProfile = query({
       throw new ConvexError("User not found");
     }
 
-    return ctx.db
-      .query("users")
-      .withIndex("by_email", (q) => q.eq("email", currentUser.email))
-      .unique();
+    const user = await ctx.db.get(currentUser._id);
+
+    const settings = await ctx.db
+      .query("settings")
+      .withIndex("by_userId", (q) => q.eq("userId", currentUser._id))
+      .first();
+
+    return { ...user, settings };
+  },
+});
+
+export const updateProfilePhotoVisibility = mutation({
+  args: {
+    profilePhoto: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Unauthorized");
+
+    const user = await getUserByClerkId({ ctx, clerkId: identity.subject });
+    if (!user) throw new Error("User not found");
+
+    const existingSettings = await ctx.db
+      .query("settings")
+      .filter((q) => q.eq(q.field("userId"), user._id))
+      .first();
+
+    if (existingSettings) {
+      await ctx.db.patch(existingSettings._id, {
+        profilePhoto: args.profilePhoto,
+      });
+    } else {
+      await ctx.db.insert("settings", {
+        userId: user._id,
+        profilePhoto: args.profilePhoto,
+        readReceipts: false,
+      });
+    }
   },
 });

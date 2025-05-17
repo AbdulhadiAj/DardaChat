@@ -51,11 +51,21 @@ export const get = query({
 
       const otherMemberDetails = await ctx.db.get(otherMembership.memberId);
 
+      if (!otherMemberDetails) {
+        throw new ConvexError("Can't find other member");
+      }
+
+      const settings = await ctx.db
+        .query("settings")
+        .withIndex("by_userId", (q) => q.eq("userId", otherMemberDetails._id))
+        .first();
+
       return {
         ...chat,
         otherMember: {
           ...otherMemberDetails,
           lastSeenMessageId: otherMembership.lastSeenMessage,
+          settings,
         },
         otherMembers: null,
         isAdmin: false,

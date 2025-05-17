@@ -93,7 +93,10 @@ const Body = ({ members, callType, setCallType }: Props) => {
     <div className="flex-1 w-full flex overflow-y-scroll flex-col-reverse gap-2 p-3 no-scrollbar">
       {!callType ? (
         messages?.map(
-          ({ message, senderImage, senderName, isCurrentUser }, index) => {
+          (
+            { message, senderImage, senderName, isCurrentUser, settings },
+            index
+          ) => {
             const lastByUser =
               messages[index - 1]?.message.senderId ===
               messages[index].message.senderId;
@@ -106,7 +109,11 @@ const Body = ({ members, callType, setCallType }: Props) => {
               <Message
                 key={message._id}
                 fromCurrentUser={isCurrentUser}
-                senderImage={senderImage}
+                senderImage={
+                  !settings?.profilePhoto
+                    ? senderImage
+                    : "https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18ydURlc3RCOFBUb3g0U1NWOHp6OWNSYVhsaHQiLCJyaWQiOiJ1c2VyXzJ4QjlOT05jNWRpSTJVelhlcGFmMEhmVGRSUCJ9"
+                }
                 senderName={senderName}
                 lastByUser={lastByUser}
                 content={message.content}

@@ -44,7 +44,12 @@ export const get = query({
           throw new ConvexError("Friend could not be found");
         }
 
-        return friend;
+        const settings = await ctx.db
+          .query("settings")
+          .withIndex("by_userId", (q) => q.eq("userId", friend._id))
+          .first();
+
+        return { friend, settings };
       })
     );
     return friends;

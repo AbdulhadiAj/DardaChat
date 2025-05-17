@@ -54,5 +54,5 @@ export default defineSchema({
     profilePhoto: v.boolean(),
     readReceipts: v.boolean(),
     userId: v.id("users"),
-  }),
+  }).index("by_userId", ["userId"]),
 });

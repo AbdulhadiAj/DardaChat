@@ -57,9 +57,19 @@ export const getAll = query({
 
           const otherMember = await ctx.db.get(otherMembership.memberId);
 
+          if (!otherMember) {
+            throw new ConvexError("Can't find other member");
+          }
+
+          const settings = await ctx.db
+            .query("settings")
+            .withIndex("by_userId", (q) => q.eq("userId", otherMember._id))
+            .first();
+
           return {
             chat,
             otherMember,
+            settings,
           };
         }
       })
@@ -222,11 +232,21 @@ export const get = query({
             ? await ctx.db.get(otherMembership.memberId)
             : null;
 
+          if (!otherMember) {
+            throw new ConvexError("Can't find other member");
+          }
+
+          const settings = await ctx.db
+            .query("settings")
+            .withIndex("by_userId", (q) => q.eq("userId", otherMember._id))
+            .first();
+
           return {
             chat,
             otherMember,
             lastMessage,
             unseenChatCount: unseenChatMessages.length,
+            settings,
           };
         }
       })

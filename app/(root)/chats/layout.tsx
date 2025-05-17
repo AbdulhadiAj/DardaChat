@@ -52,7 +52,11 @@ const ChatsLayout = ({ children }: Props) => {
                   key={chat.chat._id}
                   id={chat.chat._id}
                   username={chat.otherMember?.username || ""}
-                  imageUrl={chat.otherMember?.imageUrl || ""}
+                  imageUrl={
+                    chat.settings?.profilePhoto
+                      ? "https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18ydURlc3RCOFBUb3g0U1NWOHp6OWNSYVhsaHQiLCJyaWQiOiJ1c2VyXzJ4QjlOT05jNWRpSTJVelhlcGFmMEhmVGRSUCJ9"
+                      : chat.otherMember?.imageUrl || ""
+                  }
                   lastMessageContent={chat.lastMessage?.content}
                   lastMessageSender={chat.lastMessage?.sender}
                   unseenCount={chat.unseenChatCount!}

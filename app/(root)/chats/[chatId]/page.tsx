@@ -55,7 +55,11 @@ const ChatPage = (props: { params: Params }) => {
       />
       <Header
         name={chat.otherMember?.username || ""}
-        imageUrl={chat.otherMember?.imageUrl}
+        imageUrl={
+          !chat.otherMember?.settings?.profilePhoto
+            ? chat.otherMember?.imageUrl
+            : "https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18ydURlc3RCOFBUb3g0U1NWOHp6OWNSYVhsaHQiLCJyaWQiOiJ1c2VyXzJ4QjlOT05jNWRpSTJVelhlcGFmMEhmVGRSUCJ9"
+        }
         options={[
           isBlocked?.existingBlock && isBlocked.isBlocker
             ? {
