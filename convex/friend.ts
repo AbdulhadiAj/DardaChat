@@ -272,3 +272,40 @@ export const isBlocked = query({
     return { existingBlock };
   },
 });
+
+export const unblockByUserId = mutation({
+  args: {
+    userId: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Unauthorized");
+    }
+
+    const currentUser = await getUserByClerkId({
+      ctx,
+      clerkId: identity.subject,
+    });
+
+    if (!currentUser) {
+      throw new ConvexError("User not found");
+    }
+
+    const block = await ctx.db
+      .query("blockedContacts")
+      .withIndex("by_blocker_blocked", (q) =>
+        q
+          .eq("blockerContactId", currentUser._id)
+          .eq("blockedContactId", args.userId)
+      )
+      .unique();
+
+    if (!block) {
+      throw new ConvexError("Block relationship not found");
+    }
+
+    await ctx.db.delete(block._id);
+  },
+});

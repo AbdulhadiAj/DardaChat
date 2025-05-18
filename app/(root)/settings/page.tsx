@@ -21,6 +21,7 @@ import ItemList from "@/components/shared/item-list/ItemList";
 import React from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { Button } from "@/components/ui/button";
 
 type Props = {};
 
@@ -45,6 +46,8 @@ const SettingsPage = (props: Props) => {
   };
 
   const blockedUsers = useQuery(api.friends.getBlockedUsers);
+
+  const unblock = useMutation(api.friend.unblockByUserId);
 
   return (
     <>
@@ -120,6 +123,14 @@ const SettingsPage = (props: Props) => {
                           </Avatar>
                           <span>{user?.username}</span>
                         </div>
+                        {user ? (
+                          <Button
+                            variant="secondary"
+                            onClick={() => unblock({ userId: user._id })}
+                          >
+                            Unblock
+                          </Button>
+                        ) : null}
                       </div>
                     ))
                   ) : (

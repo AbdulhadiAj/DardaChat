@@ -32,7 +32,7 @@ const ItemList = ({
           {Action2 ? <div className="ml-4">{Action2}</div> : null}
         </div>
       </div>
-      <div className="w-full h-full flex flex-col items-center justify-start gap-2">
+      <div className="w-full h-full flex flex-col items-center justify-start gap-2 flex-1 overflow-y-scroll p-3 no-scrollbar">
         {children}
       </div>
     </Card>
