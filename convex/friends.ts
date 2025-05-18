@@ -55,3 +55,28 @@ export const get = query({
     return friends;
   },
 });
+
+export const getBlockedUsers = query({
+  args: {},
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new ConvexError("Unauthorized");
+
+    const currentUser = await getUserByClerkId({
+      ctx,
+      clerkId: identity.subject,
+    });
+    if (!currentUser) throw new ConvexError("User not found");
+
+    const blocks = await ctx.db
+      .query("blockedContacts")
+      .withIndex("by_blocker", (q) => q.eq("blockerContactId", currentUser._id))
+      .collect();
+
+    const blockedUsers = await Promise.all(
+      blocks.map((block) => ctx.db.get(block.blockedContactId))
+    );
+
+    return blockedUsers;
+  },
+});

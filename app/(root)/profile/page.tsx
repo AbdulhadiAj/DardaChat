@@ -36,7 +36,9 @@ const ProfilePage = (props: Props) => {
         </Avatar>
         <div className="text-center">
           <h2 className="text-lg font-semibold">{user.username}</h2>
-          <Badge className="bg-green-500 text-white mt-1">Active</Badge>
+          <Badge className="bg-green-500 text-white mt-1">
+            Active <span className="text-xs text-gray-500">Coming soon</span>
+          </Badge>
         </div>
         <p className="text-muted-foreground text-center text-sm">
           If several languages coalesce, the grammar of the resulting language

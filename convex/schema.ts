@@ -49,7 +49,9 @@ export default defineSchema({
   blockedContacts: defineTable({
     blockedContactId: v.id("users"),
     blockerContactId: v.id("users"),
-  }).index("by_blocker_blocked", ["blockerContactId", "blockedContactId"]),
+  })
+    .index("by_blocker_blocked", ["blockerContactId", "blockedContactId"])
+    .index("by_blocker", ["blockerContactId"]),
   settings: defineTable({
     profilePhoto: v.boolean(),
     readReceipts: v.boolean(),

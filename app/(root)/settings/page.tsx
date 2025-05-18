@@ -44,6 +44,8 @@ const SettingsPage = (props: Props) => {
     updateProfilePhoto({ profilePhoto: checked });
   };
 
+  const blockedUsers = useQuery(api.friends.getBlockedUsers);
+
   return (
     <>
       <ItemList title="Settings">
@@ -102,15 +104,51 @@ const SettingsPage = (props: Props) => {
 
               <AccordionItem value="blocked-contacts">
                 <AccordionTrigger>Blocked contacts</AccordionTrigger>
-                <AccordionContent>
-                  {/* Add security options here */}
+                <AccordionContent className="space-y-3">
+                  {blockedUsers && blockedUsers.length > 0 ? (
+                    blockedUsers.map((user) => (
+                      <div
+                        key={user?._id}
+                        className="flex items-center justify-between border p-3 rounded-md"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Avatar className="w-8 h-8">
+                            <AvatarImage src={user?.imageUrl} />
+                            <AvatarFallback>
+                              {user?.username?.[0]}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span>{user?.username}</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      No blocked contacts
+                    </p>
+                  )}
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="help">
                 <AccordionTrigger>Help</AccordionTrigger>
-                <AccordionContent>
-                  {/* Add help options here */}
+                <AccordionContent className="space-y-4 text-sm text-muted-foreground">
+                  <div className="flex justify-between items-center">
+                    <span>FAQs</span>
+                    <span className="text-xs text-gray-500">Coming soon</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Contact Support</span>
+                    <span className="text-xs text-gray-500">Coming soon</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Terms & Conditions</span>
+                    <span className="text-xs text-gray-500">Coming soon</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Report a Bug</span>
+                    <span className="text-xs text-gray-500">Coming soon</span>
+                  </div>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
