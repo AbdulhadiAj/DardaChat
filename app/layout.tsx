@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ConvexClientProvider from "@/providers/ConvexClientProvider";
@@ -16,9 +16,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "DodgerBlue",
+};
+
 export const metadata: Metadata = {
   title: "DardaChat",
   description: "Realtime Chat Application",
+  generator: "Next.js",
+  manifest: "/manifest.json",
+  authors: [{ name: "Abdulhadi Aljabban" }, { name: "Maher Alhamwi" }],
+  icons: [
+    { rel: "apple-touch-icon", url: "icon512_maskable.png" },
+    { rel: "icon", url: "icon512_rounded.png" },
+  ],
 };
 
 export default function RootLayout({
