@@ -65,11 +65,6 @@ const ProfilePage = (props: Props) => {
                     <br />
                     <span>{currentTime}</span>
                   </div>
-                  <div>
-                    <span className="text-muted-foreground">Location</span>
-                    <br />
-                    <span className="font-semibold">California, USA</span>
-                  </div>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="files">
